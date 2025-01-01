@@ -23,3 +23,4 @@ yarn-error.log
 /.zed
 _ide_*.php
 .phpstorm.meta.php
+.laradumps.yaml
