@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -50,7 +50,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
+    protected function validator(array $data)
     {
 
         return Validator::make($data, app(UserCreateRequest::class)->rules());
@@ -59,9 +59,7 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      * @param array $data
-     * @return  \App\Models\User
-     *
-     * @throws ValidationException
+     * @return \App\Models\User
      */
 
     protected function create(array $data)
@@ -70,7 +68,7 @@ class RegisterController extends Controller
         $user = User::create(
             $this->validator($data)->validated()
         );
-            $user->assignRole(RoleEnum::CUSTOMER->value);
+        $user->assignRole(RoleEnum::CUSTOMER->value);
 
         return $user;
     }
