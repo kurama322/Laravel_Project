@@ -2,13 +2,20 @@
 
 namespace App\Models;
 
+use GuzzleHttp\Psr7\UploadedFile;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
+use Illuminate\Support\Str;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -54,9 +61,32 @@ class Product extends Model
     }
 
 
-    public function categories ():BelongsTo
+    public function categories ():BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
+    public function thumbnailUrl():Attribute
+    {
+        return Attribute::get(function (){
+            return Storage::url($this->attributes['thumbnail']);
+        });
+    }
+//    public function  thumbnail():Attribute
+//    {
+//        return Attribute::get(function (UploadedFile $file){
+//            $fileName = Str::slug(microtime());
+//            $filePath = 'products/'. $this->attributes['slug'] .'/$fileName' . $file->getClientFilename();
+//
+//            Storage::put($filePath , File::get($file));
+//            Storage::setVisibility($filePath, 'public');
+//            return $filePath;
+//        });
+
+//    }
+
+    public function imagesFolderPath():string
+    {
+        return "products/$this->slug/";
+    }
 }
