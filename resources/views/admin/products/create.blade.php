@@ -177,5 +177,5 @@
 @endsection
 
 @push('footer-js')
-    @vite(['resources/js/admin/products-preview.js'])
+    @vite(['resources/js/admin/products.js'])
 @endpush

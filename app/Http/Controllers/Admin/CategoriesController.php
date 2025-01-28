@@ -29,12 +29,11 @@ class CategoriesController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Category $category)
+    public function create()
     {
         $categories = Category::select(['id', 'name'])->get();
-       return view('admin/categories/create' , compact('categories'));
+        return view('admin/categories/create', compact('categories'));
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -52,14 +51,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Category $category)
     {   $category->load(['parent']);
         $categories = Category::select(['id', 'name'])->get();
