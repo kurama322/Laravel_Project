@@ -1,8 +1,20 @@
 // Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
-
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+
+.images-wrapper-item {
+    position: relative;
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: -5%;
+        border-radius: 100%;
+    }
+}

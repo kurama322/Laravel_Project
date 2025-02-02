@@ -31,11 +31,11 @@
                                 <label for="LastName" class="col-md-4 col-form-label text-md-end">{{ __('Last Name') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="LastName" type="text"
-                                           class="form-control @error('LastName') is-invalid @enderror"
-                                           name="LastName" value="{{ old('LastName') }}">
+                                    <input id="lastname" type="text"
+                                           class="form-control @error('lastname') is-invalid @enderror"
+                                           name="lastname" value="{{ old('lastname') }}">
 
-                                    @error('LastName')
+                                    @error('lastname')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
