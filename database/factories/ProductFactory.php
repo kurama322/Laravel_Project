@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
@@ -20,7 +20,6 @@ class ProductFactory extends Factory
     {
         $title = fake()->unique()->words(rand(1, 3), true);
         $slug = Str::slug($title);
-
         return [
             'title' => $title,
             'slug' => $slug,
@@ -30,25 +29,38 @@ class ProductFactory extends Factory
             'discount' => fake()->boolean() ? rand(10, 85) : null,
             'quantity' => rand(0, 50),
             'thumbnail' => $this->generateImage($slug),
+            'thumbnail' => '',
         ];
     }
 
-    protected function generateImage( string $slug): string
+    public function withTitle(string $title): static
     {
-        $dirName = "faker/products/$slug";
+        return $this->state(fn (array $attributes) => [
+            'title' => $title,
+            'slug' => Str::slug($title),
+        ]);
+    }
+
+    public function withThumbnail(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'thumbnail' => $this->generateImage($attributes['slug']),
+        ]);
+    }
+
+    protected function generateImage(string $slug): string
+    {
+        $dirName = "faker/products/$slug"; // storage/app/faker/products/product-1
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
-
-        if(! Storage::exists($dirName)) {
+        if (!Storage::exists($dirName)) {
             Storage::createDirectory($dirName);
         }
-
         /**
-         *   @var \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider $faker
+         * @var \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider $faker
          */
-
-        return $dirName. '/' . $faker->image(
-            dir: Storage::path($dirName),
+        return $dirName . '/' . $faker->image(
+                dir: Storage::path($dirName),
                 isFullPath: false
             );
     }
