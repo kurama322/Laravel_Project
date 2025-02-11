@@ -25,5 +25,8 @@ trait SetupTrait
     protected function user(RoleEnum $role = RoleEnum::ADMIN): User
     {
         return User::role($role->value)->firstOrFail();
+
     }
+
+
 }

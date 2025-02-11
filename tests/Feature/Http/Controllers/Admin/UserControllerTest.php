@@ -18,9 +18,9 @@ class UserControllerTest extends TestCase
     static function indexSuccessProvider()
     {
         return [
-            'Admin has access' => [RoleEnum::ADMIN ,200],
-            'Moderator has access' => [RoleEnum::MODERATOR,200],
-            'Customer has no access' => [RoleEnum::CUSTOMER,403],
+            'Admin has access' => [RoleEnum::ADMIN, 200],
+            'Moderator has access' => [RoleEnum::MODERATOR, 200],
+            'Customer has no access' => [RoleEnum::CUSTOMER, 403],
         ];
 
 
@@ -114,21 +114,24 @@ class UserControllerTest extends TestCase
             'password' => '123',
         ]);
         $response->assertStatus(422);
-}
+    }
 
-    #[DataProvider('indexSuccessProvider')]
-public function test_dashboard_login(RoleEnum $role , int $status)
-{
-    $user = User::factory()->create();
+  #[Dataprovider('indexSuccessProvider')]
+public function test_login_dashboard(RoleEnum $role, int $status)
+  {
+      $user = $this->user();
+      $user -> assignRole($role);
+
+      $this->assertDatabaseHas('roles', [
+          'name' => $role->value,
+      ]);
+
+     $response = $this->actingAs($user)->get(route('admin.dashboard'));
+     $response->assertStatus($status);
+  }
 
 
-    $response = $this->actingAs($user)
-        ->withSession(['role' => $role])
-                        ->get(route('admin.dashboard'));
 
-   $response->assertStatus($status);
-
-}
 
 }
 
