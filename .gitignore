@@ -24,3 +24,6 @@ yarn-error.log
 _ide_*.php
 .phpstorm.meta.php
 .laradumps.yaml
+*.json
+*.json.gz
+index

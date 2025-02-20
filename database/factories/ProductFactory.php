@@ -28,7 +28,6 @@ class ProductFactory extends Factory
             'price' => fake()->randomFloat(2, 10, 200),
             'discount' => fake()->boolean() ? rand(10, 85) : null,
             'quantity' => rand(0, 50),
-            'thumbnail' => $this->generateImage($slug),
             'thumbnail' => '',
         ];
     }
@@ -53,6 +52,7 @@ class ProductFactory extends Factory
         $dirName = "faker/products/$slug"; // storage/app/faker/products/product-1
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \Smknstd\FakerPicsumImages\FakerPicsumImagesProvider($faker));
+
         if (!Storage::exists($dirName)) {
             Storage::createDirectory($dirName);
         }
