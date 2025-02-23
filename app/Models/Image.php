@@ -40,8 +40,8 @@ class Image extends Model
         $file = $pathData['image'];
         $fileName = Str::slug(microtime());
         $filePath = $pathData['path'] . $fileName . $file->getClientOriginalName();
-        Storage::put($filePath,File::get($file));
 
+        Storage::put($filePath, File::get($file));
         Storage::setVisibility($filePath,'public');
 
         $this->attributes['path'] = $filePath;
