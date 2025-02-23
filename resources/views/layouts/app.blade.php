@@ -9,6 +9,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="{{ asset('css/iziToast.css') }}" rel="stylesheet">
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -31,6 +33,17 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="{{ route('cart.index') }}">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span
+                                id="cartCountBadge"
+                                style="font-size: 10px;"
+                                class="position-absolute top-20 start-90 translate-middle badge rounded-pill bg-info">
+                                {{Cart::instance('cart')->countItems()}}
+                              </span>
+                        </a>
+                    </li>
                     <!-- Authentication Links -->
                     @guest
                         @if (Route::has('login'))
@@ -48,7 +61,6 @@
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                             </a>
-
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 @hasanyrole('admin|moderator')
                                 <a href="{{route('admin.dashboard')}}" class="dropdown-item">Admin panel</a>
@@ -72,5 +84,7 @@
         @yield('content')
     </main>
 </div>
+<script src="{{ asset('js/iziToast.js') }}"></script>
+@include('vendor.lara-izitoast.toast')
 </body>
 </html>
