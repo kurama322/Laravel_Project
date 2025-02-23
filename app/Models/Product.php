@@ -39,21 +39,23 @@ class Product extends Model
             return Storage::url($this->attributes['thumbnail']);
         });
     }
-    public function setThumbnailAttribute(UploadedFile $file)
+    public function setThumbnailAttribute(UploadedFile|string $file)
     {
-
-        if(!empty ($this->attributes['thumbnail'])) {
+        if(is_string($file)){
+            $filePath=$file;
+        } else{
+            if(!empty ($this->attributes['thumbnail'])) {
                 Storage::delete($this->attributes['thumbnail']);
-        }
-        $fileName = Str::slug(microtime());
-        $filePath = 'products/' . $this->attributes['slug'] . "/$fileName" . $file->getClientOriginalName();
+            }
+            $fileName = Str::slug(microtime());
+            $filePath = 'products/' . $this->attributes['slug'] . "/$fileName" . $file->getClientOriginalName();
 
-        Storage::put($filePath, File::get($file));
-        Storage::setVisibility($filePath, 'public');
+            Storage::put($filePath, File::get($file));
+            Storage::setVisibility($filePath, 'public');
+        }
 
         $this->attributes['thumbnail'] = $filePath;
     }
-
     public function imagesFolderPath():string
     {
         return "products/$this->slug/";

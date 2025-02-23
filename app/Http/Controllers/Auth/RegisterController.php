@@ -58,16 +58,17 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     * @param array $data
+     *
+     * @param  array  $data
      * @return \App\Models\User
      */
 
     protected function create(array $data)
     {
-
         $user = User::create(
             $this->validator($data)->validated()
         );
+
         $user->assignRole(RoleEnum::CUSTOMER->value);
 
         return $user;
