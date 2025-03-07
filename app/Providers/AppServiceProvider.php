@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\ImagesRepositoryContract;
+use App\Repositories\Contracts\OrderRepositoryContract;
 use App\Repositories\Contracts\ProductRepositoryContract;
 use App\Repositories\ImagesRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\ProductRepository;
+use App\Services\Contracts\PaypalServiceContract;
 use App\Services\FileService;
 use App\Services\Contracts\FileServiceContract;
+use App\Services\PaypalService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
         ProductRepositoryContract::class=>ProductRepository::class,
         ImagesRepositoryContract::class=>ImagesRepository::class,
         FileServiceContract::class=>FileService::class,
+        OrderRepositoryContract::class=>OrderRepository::class,
+        PaypalServiceContract::class=>PaypalService::class,
+
     ];
     /**
      * Register any application services.

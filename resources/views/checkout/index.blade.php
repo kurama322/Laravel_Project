@@ -18,7 +18,10 @@
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') ?? $user?->name }}" required autocomplete="name" autofocus>
+                                    <input id="name" type="text"
+                                           class="form-control @error('name') is-invalid @enderror" name="name"
+                                           value="{{ old('name') ?? $user?->name }}" required autocomplete="name"
+                                           autofocus>
 
                                     @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -29,10 +32,14 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="lastname" class="col-md-4 col-form-label text-md-end">{{ __('Last name') }}</label>
+                                <label for="lastname"
+                                       class="col-md-4 col-form-label text-md-end">{{ __('Last name') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="lastname" type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ old('lastname') ?? $user?->lastname }}" required autocomplete="lastname">
+                                    <input id="lastname" type="text"
+                                           class="form-control @error('lastname') is-invalid @enderror" name="lastname"
+                                           value="{{ old('lastname') ?? $user?->lastname }}" required
+                                           autocomplete="lastname">
 
                                     @error('lastname')
                                     <span class="invalid-feedback" role="alert">
@@ -43,10 +50,13 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                <label for="email"
+                                       class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ?? $user?->email }}" required autocomplete="email">
+                                    <input id="email" type="email"
+                                           class="form-control @error('email') is-invalid @enderror" name="email"
+                                           value="{{ old('email') ?? $user?->email }}" required autocomplete="email">
 
                                     @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -60,7 +70,9 @@
                                 <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Phone') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') ?? $user?->phone }}" required autocomplete="phone">
+                                    <input id="phone" type="tel"
+                                           class="form-control @error('phone') is-invalid @enderror" name="phone"
+                                           value="{{ old('phone') ?? $user?->phone }}" required autocomplete="phone">
 
                                     @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -75,7 +87,9 @@
                                 <label for="city" class="col-md-4 col-form-label text-md-end">{{ __('City') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="city" type="text" class="form-control @error('city') is-invalid @enderror" name="city" value="{{ old('city') }}" required>
+                                    <input id="city" type="text"
+                                           class="form-control @error('city') is-invalid @enderror" name="city"
+                                           value="{{ old('city') }}" required>
 
                                     @error('city')
                                     <span class="invalid-feedback" role="alert">
@@ -87,10 +101,13 @@
 
 
                             <div class="row mb-3">
-                                <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
+                                <label for="address"
+                                       class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}" required>
+                                    <input id="address" type="text"
+                                           class="form-control @error('address') is-invalid @enderror" name="address"
+                                           value="{{ old('address') }}" required>
 
                                     @error('address')
                                     <span class="invalid-feedback" role="alert">
@@ -119,7 +136,8 @@
                             <tbody>
                             @foreach($cart->content() as $item)
                                 <tr>
-                                    <td><img src="{{ $item->model->thumbnailUrl }}" alt="{{ $item->name }}" width="35"></td>
+                                    <td><img src="{{ $item->model->thumbnailUrl }}" alt="{{ $item->name }}" width="35">
+                                    </td>
                                     <td>
                                         <a href="{{ route('products.show', $item->model) }}">{{ $item->name }}</a>
                                     </td>
@@ -150,7 +168,7 @@
                             </tbody>
                         </table>
                         <br>
-                        {{--                        @include('payments.paypal')--}}
+                        @include('payments.paypal')
                     </div>
                 </div>
             </div>
