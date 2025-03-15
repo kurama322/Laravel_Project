@@ -15,11 +15,9 @@ use Throwable;
 class PaypalController extends Controller
 {
     public function __construct(
-        protected PaypalService   $paypalService,
+        protected PaypalService $paypalService,
         protected OrderRepository $orderRepository
-    )
-    {
-    }
+    ) {}
 
     public function create(CreateOrderRequest $request)
     {
@@ -29,7 +27,7 @@ class PaypalController extends Controller
 
             $paypalOrderId = $this->paypalService->create();
 
-            if (!$paypalOrderId) {
+            if (! $paypalOrderId) {
                 throw new \Exception('Could not create paypal order. Payment was not completed');
             }
 
@@ -37,7 +35,9 @@ class PaypalController extends Controller
 
             $order = $this->orderRepository->create($data);
 
+
             DB::commit();
+
 
             return response()->json($order);
         } catch (Throwable $exception) {
@@ -61,7 +61,7 @@ class PaypalController extends Controller
 
             $paymentStatus = $this->paypalService->capture($vendorOrderId);
 
-            $order = $this->orderRepository->setTransaction(
+            $this->orderRepository->setTransaction(
                 $vendorOrderId,
                 PaymentSystemEnum::Paypal,
                 $paymentStatus
@@ -71,7 +71,9 @@ class PaypalController extends Controller
 
             DB::commit();
 
-            return response()->json($order);
+            return response()->json([
+                'orderId' => $vendorOrderId,
+            ]);
         } catch (Throwable $exception) {
             DB::rollBack();
 

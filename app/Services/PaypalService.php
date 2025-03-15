@@ -8,14 +8,14 @@ use Srmklive\PayPal\Services\PayPal;
 
 class PaypalService implements Contracts\PaypalServiceContract
 {
+    protected Paypal $payPal;
 
-    protected  Paypal $payPal;
-public function __construct()
-{
+    public function __construct()
+    {
         $this->payPal = app(PayPal::class);
         $this->payPal->setApiCredentials(config('paypal'));
         $this->payPal->setAccessToken($this->payPal->getAccessToken());
-}
+    }
 
     public function create(): ?string
     {
@@ -30,11 +30,15 @@ public function __construct()
         return $paypalOrder['id'] ?? null;
     }
 
-
-
-        public function capture(string $vendorOrderId): TransactionStatusesEnum
+    public function capture(string $vendorOrderId): TransactionStatusesEnum
     {
-        return TransactionStatusesEnum::Pending;
+
+        $result = $this->payPal->capturePaymentOrder($vendorOrderId);
+        return match ($result['status']) {
+            'COMPLETED', 'APPROVED' => TransactionStatusesEnum::Success,
+            'CREATE', 'SAVED' => TransactionStatusesEnum::Pending,
+            default => TransactionStatusesEnum::Cancelled
+        };
     }
 
     protected function buildOrderRequestData(): array
@@ -48,7 +52,7 @@ public function __construct()
                 $items[] = [
                     'name' => $item->name,
                     'quantity' => $item->qty,
-                    'sku' => $item->model->sku,
+                    'SKU' => $item->model->SKU,
                     'url' => url(route('products.show', $item->model)),
                     'category' => 'PHYSICAL_GOODS',
                     'unit_amount' => [
@@ -60,8 +64,8 @@ public function __construct()
                         'value' => round($item->price / 100 * $item->taxRate, 2),
                     ]
                 ];
+                ds($items);
             });
-
         return [
             'intent' => 'CAPTURE',
             'purchase_units' => [

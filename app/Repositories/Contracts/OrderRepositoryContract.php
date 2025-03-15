@@ -13,6 +13,6 @@ interface OrderRepositoryContract
     public function setTransaction(
         string $vendorOrderId,
         PaymentSystemEnum $paymentSystem,
-        TransactionStatusesEnum $transactionStatus,
-    ): Order;
+        TransactionStatusesEnum $status,
+    ): void;
 }

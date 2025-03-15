@@ -20,8 +20,8 @@ class CreateOrderRequest extends FormRequest
             'lastname'=> ['required', 'string', 'max:50'],
             'email' =>['required', 'string', 'email', 'max:255',],
             'phone' =>['required', 'string', 'min:10', 'max:15' ],
-            'city' =>['required', 'string', 'max:50'],
-            'address' =>['required', 'string', 'max:255'],
+            'city' =>['required', 'string', 'min:2'],
+            'address' =>['required', 'string', 'min:2'],
         ];
     }
 }

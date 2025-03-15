@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum OrderStatusEnum:string
 {
-    case  InProgress = 'InProcess';
+    case  InProgress = 'In Process';
     case  Paid = 'Paid';
     case Completed = 'Completed';
 

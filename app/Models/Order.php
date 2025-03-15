@@ -21,6 +21,7 @@ class Order extends Model
         'total'=>'float',
     ];
 
+
     public function user():BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -33,8 +34,9 @@ class Order extends Model
             ->withPivot(['single_price','quantity','name']);
     }
 
-    public function transactions():HasOne
+    public function transaction():HasOne
     {
         return $this->hasOne(Transaction::class);
     }
+
 }
