@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Ajax\AddToCartController;
+use App\Http\Controllers\Ajax\Payments\PaypalController;
 use App\Http\Controllers\Ajax\RemoveImageController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +17,14 @@ Route::resource('products', \App\Http\Controllers\ProductsController::class)
     ->only(['index', 'show']);
 Route::resource('categories', \App\Http\Controllers\CategoriesController::class)
     ->only(['index', 'show']);
+Route::get('/orders/{vendor_order_id}/thank-you', \App\Http\Controllers\Pages\ThankYouController::class);
+Route::get('checkout' , CheckoutController::class)->name('checkout');
+    Route::name('cart.')->prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::delete('/', [CartController::class, 'remove'])->name('remove');
+    Route::post('{product}', [CartController::class, 'add'])->name('add');
+    Route::put('{product}', [CartController::class, 'update'])->name('update');
+});
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin|moderator'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard'); // domain/admin/ | admin.dashboard
@@ -22,7 +34,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin|moderato
         ->except(['show']);
 });
 Route::prefix('ajax')->name('ajax.')->group(function () {
+    Route::post('cart/{product}', AddToCartController::class)->name('cart.add');
     Route::middleware(['auth', 'role:admin|moderator'])->group(function () {
         Route::delete('images/{image}', RemoveImageController::class)->name('images.remove');
     });
+    Route::prefix('paypal')->name('paypal.')->group(function () {
+        Route::post('order', [PaypalController::class, 'create'])->name('order.create');
+        Route::post('order/{vendorOrderId}/capture', [PaypalController::class, 'capture'])->name('order.capture');
+    });
+
 });
