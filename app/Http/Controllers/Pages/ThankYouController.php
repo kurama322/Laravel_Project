@@ -13,18 +13,20 @@ class ThankYouController extends Controller
     public function __invoke(string $vendorOrderId)
     {
         try {
-            $order =Order :: with(['transactions' , 'products'])
-            ->where('vendor_order_id', $vendorOrderId)
-            ->firstOrFail();
+            $order = Order::with(['transaction', 'products'])
+                ->where('vendor_order_id', $vendorOrderId)
+                ->firstOrFail();
+            $showInvoiceBtn =!!$order->user_id;
 
-            return view('order/thank-you', compact('order'));
-        }catch (Throwable $throwable){
-    logs()->error("[ThankYouController]" .  $throwable->getMessage(), [
-        'exception' => $throwable,
-        'vendorOrderId' => $vendorOrderId,
-    ]);
+            return view('order/thank-you', compact('order' ,'showInvoiceBtn'));
+        } catch (Throwable $throwable) {
+            logs()->error("[ThankYouController]" . $throwable->getMessage(), [
+                'exception' => $throwable,
+                'vendorOrderId' => $vendorOrderId,
+            ]);
 
 
-        return redirect()->route('home');}
+            return redirect()->route('home');
+        }
     }
 }

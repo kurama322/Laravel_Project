@@ -6,8 +6,17 @@ use App\Http\Controllers\Ajax\Payments\PaypalController;
 use App\Http\Controllers\Ajax\RemoveImageController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\InvoiceController;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+Route::get('test', function () {
+   logs()->info('route test');
+
+   $order = Order::take(1)->first();
+   \App\Events\OrderCreatedEvent::dispatch($order);
+});
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
 
@@ -25,6 +34,10 @@ Route::get('checkout' , CheckoutController::class)->name('checkout');
     Route::post('{product}', [CartController::class, 'add'])->name('add');
     Route::put('{product}', [CartController::class, 'update'])->name('update');
 });
+
+    Route::middleware('auth')->group(function () {
+        Route::get('orders/{vendor_order_id}/invoice', InvoiceController::class)->name('order.invoice');
+    });
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin|moderator'])->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard'); // domain/admin/ | admin.dashboard

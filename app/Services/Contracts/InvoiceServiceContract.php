@@ -7,5 +7,5 @@ use LaravelDaily\Invoices\Invoice;
 
 interface InvoiceServiceContract
 {
-    public static function generate(Order $order):Invoice;
+    public function generate(Order $order):Invoice;
 }

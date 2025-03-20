@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-
 use App\Models\Order;
 use App\Services\Contracts\InvoiceServiceContract;
 use Illuminate\Database\Eloquent\Collection;
@@ -11,15 +10,15 @@ use LaravelDaily\Invoices\Invoice;
 
 class InvoiceService implements InvoiceServiceContract
 {
-    public static function generate(Order $order): Invoice
+    public function generate(Order $order): Invoice
     {
-        $order->loadMissing(['transactions' . 'products']);
+        $order->loadMissing(['transaction' , 'products']);
 
         $customer = new Buyer([
             'name' => "$order->name $order->lastname",
             'phone' => $order->phone,
             'custom_fields' => [
-                'emai' => $order->email,
+                'email' => $order->email,
                 'city' => $order->city,
                 'address' => $order->address
             ]
@@ -44,7 +43,6 @@ class InvoiceService implements InvoiceServiceContract
 
         foreach ($products as $product) {
             $items[] = InvoiceItem::make($product->pivot->name)
-                ->description($product->description)
                 ->quantity($product->pivot->quantity)
                 ->pricePerUnit($product->pivot->single_price)
                 ->units('шт');
