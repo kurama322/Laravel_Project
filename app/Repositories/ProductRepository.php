@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use App\Http\Requests\Admin\Products\CreateRequest;
 use App\Http\Requests\Admin\Products\EditRequest;
+use App\Http\Requests\Api\v1\ProductEditRequest;
 use App\Models\Product;
 use App\Repositories\Contracts\ImagesRepositoryContract;
 use App\Repositories\Contracts\ProductRepositoryContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Throwable;
@@ -40,7 +42,7 @@ class ProductRepository implements Contracts\ProductRepositoryContract
         }
     }
 
-    public function update(Product $product, EditRequest $request): bool
+    public function update(Product $product, EditRequest|ProductEditRequest $request): bool
     {
         try {
             DB::beginTransaction();
@@ -59,7 +61,7 @@ class ProductRepository implements Contracts\ProductRepositoryContract
         }
     }
 
-    protected function formRequestData(CreateRequest|EditRequest $request): array
+    protected function formRequestData(CreateRequest|EditRequest|ProductEditRequest $request): array
     {
         return [
             'attributes' => collect($request->validated())
@@ -82,9 +84,10 @@ class ProductRepository implements Contracts\ProductRepositoryContract
         );
     }
 
-    public function paginate(Request $request)
+    public function paginate(Request $request, bool $withCache = true)
     {
         $category = $request->get('category');
+        $per_page = $request->get('per_page', self::PER_PAGE);
         $products = Product::with('categories')
             ->select('products.*')
             ->orderBy('id')
@@ -97,6 +100,12 @@ class ProductRepository implements Contracts\ProductRepositoryContract
                 }
             );
 
-        return $products->paginate($request->get('per_page', self::PER_PAGE));
+        if (!$withCache) {
+            return $products->paginate($per_page);
+        }
+
+        return  Cache::flexible("products_index_{$per_page}_{$category}", [5, 600], function () use ($per_page, $products) {
+            return $products->paginate($per_page);
+        });
     }
 }

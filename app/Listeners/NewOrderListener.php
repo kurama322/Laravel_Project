@@ -18,15 +18,22 @@ class NewOrderListener implements ShouldQueue
         return 'default';
     }
 
+
     public function handle(OrderCreatedEvent $event): void
     {
         logs()->info('[NewOrderListener] handle!');
 
         Notification::send(
             User::role(RoleEnum::ADMIN->value)->get(),
-            new AdminNotification($event->order)
+            app(
+                AdminNotification::class,
+                ['order' => $event->order]
+            )
         );
 
-        $event->order->notify(new UserNotification($event->order));
+        $event->order->notify(app(
+            UserNotification::class,
+            ['order' => $event->order]
+        ));
     }
 }

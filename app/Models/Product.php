@@ -26,7 +26,8 @@ class Product extends Model implements Buyable
 
     public function getRouteKeyName(): string
     {
-        return 'slug';
+
+        return request()->wantsJson()? 'id' : 'slug';
     }
 
     public function images(): MorphMany

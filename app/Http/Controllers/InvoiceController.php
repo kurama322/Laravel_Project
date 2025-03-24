@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Services\Contracts\InvoiceServiceContract;
-use Illuminate\Http\Request;
+
 
 class InvoiceController extends Controller
 {
